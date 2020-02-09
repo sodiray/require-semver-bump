@@ -13,8 +13,8 @@ async function run() {
   // Type: https://developer.github.com/v3/activity/events/types/#pushevent
   const event = JSON.stringify(github.context.payload)
 
-  const repo_name = event.repository.name
-  const repo_owner = event.repository.owner.login
+  const repo = event.repository.name
+  const owner = event.repository.owner.login
   const push_commmit_sha = event.after
 
   // This should be a token with access to your repository scoped in as a secret.
@@ -25,7 +25,7 @@ async function run() {
 
   const octokit = new github.GitHub(token)
 
-  const { data: pulls } = await octokit.pulls.list({ owner: repo_owner, repo: repo_name })
+  const { data: pulls } = await octokit.pulls.list({ owner, repo })
 
   const pull = pulls.find(p => p.head.sha == push_commmit_sha)
 
@@ -40,8 +40,8 @@ async function run() {
 
   const base_commit_sha = pull.base.sha
 
-  const head_version_url = `https://github.com/${repo}/tree/${push_commmit_sha}/oapispec/version.py`
-  const base_version_url = `https://github.com/${repo}/tree/${base_commit_sha}/oapispec/version.py`
+  const head_version_url = `https://github.com/${owner}/${repo}/tree/${push_commmit_sha}/oapispec/version.py`
+  const base_version_url = `https://github.com/${owner}/${repo}/tree/${base_commit_sha}/oapispec/version.py`
 
   const head_version_file = await http_get(head_version_url)
   const base_version_file = await http_get(base_version_url)
@@ -56,7 +56,7 @@ async function run() {
     process.exit(1)
   }
 
-  console.log(`Success, the head version (${head_version}) has been validated to be higher than the base.`)
+  console.log(`Success, the head version (${head_version}) has been validated to be higher than the base version (${base_version}).`)
   process.exit(0)
 
 }
