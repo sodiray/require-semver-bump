@@ -11,14 +11,7 @@ if (process.env.GITHUB_TOKEN) {
 async function run() {
 
   // Type: https://developer.github.com/v3/activity/events/types/#pushevent
-
-  console.log('##### CONTEXT #####')
-  console.log(github.context)
-
-  console.log('##### CONTEXT....PAYLOAD #####')
-  console.log(github.context.payload)
-
-  const event = JSON.stringify(github.context.payload)
+  const event = github.context.payload
 
   const repo = event.repository.name
   const owner = event.repository.owner.login
