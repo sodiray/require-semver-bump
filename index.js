@@ -30,8 +30,8 @@ async function run() {
     // active PRs. So, this could mean nothing. It could however mean that
     // something is wrong because there really is a PR for this push but
     // we couldn't find it.
-    console.warn('Could not find pull request for this push...')
-    process.exit(0)
+    core.warning('Could not find pull request for this push...')
+    return
   }
 
   const base_commit_sha = pull.base.sha
@@ -39,18 +39,17 @@ async function run() {
   const head_version = await get_version_at_commit(owner, repo, push_commmit_sha)
   const base_version = await get_version_at_commit(owner, repo, base_commit_sha)
 
-  console.log(`Head Version: ${head_version}`)
-  console.log(`Base Version: ${base_version}`)
+  core.debug(`Head Version: ${head_version}`)
+  core.debug(`Base Version: ${base_version}`)
 
   const head_is_higher = semver.gt(head_version, base_version)
 
   if (!head_is_higher) {
-    console.error(`The head version (${head_version}) is not greater than the base version (${base_version})`)
-    process.exit(1)
+    core.setFailed(`The head version (${head_version}) is not greater than the base version (${base_version})`)
+    return
   }
 
-  console.log(`Success, the head version (${head_version}) has been validated to be higher than the base version (${base_version}).`)
-  process.exit(1)
+  core.debug(`Success, the head version (${head_version}) has been validated to be higher than the base version (${base_version}).`)
 
 }
 
@@ -77,8 +76,8 @@ async function get_version_at_commit(owner, repo, hash) {
     const { response, body } = await http_get(version_url)
     return parse_version(body)
   } catch(err) {
-    console.log(err)
-    process.exit(1)
+    core.setFailed(err)
+    return 'VERSION_ERROR'
   }
 
 }
