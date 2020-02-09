@@ -41,25 +41,8 @@ async function run() {
 
   const base_commit_sha = pull.base.sha
 
-  const head_version_url = `https://github.com/${owner}/${repo}/tree/${push_commmit_sha}/oapispec/version.py`
-  const base_version_url = `https://github.com/${owner}/${repo}/tree/${base_commit_sha}/oapispec/version.py`
-
-  try {
-    const head_version_file = await http_get(head_version_url)
-  } catch(err) {
-    console.log(err)
-    process.exit(1)
-  }
-
-  try {
-    const base_version_file = await http_get(base_version_url)
-  } catch(err) {
-    console.log(err)
-    process.exit(1)
-  }
-
-  const head_version = parse_version(head_version_file)
-  const base_version = parse_version(base_version_file)
+  const head_version = get_version_at_commit(owner, repo, push_commmit_sha)
+  const base_version = get_version_at_commit(owner, repo, base_commit_sha)
 
   const head_is_higher = semver.gt(head_version, base_version)
 
@@ -88,6 +71,19 @@ function parse_version(str) {
   const regex = /VERSION\s?\=\s?\'(.+?)\'/
   const matches = str.regex.match(regex)
   return matches.length > 1 ? matches[1] : null
+}
+
+async function get_version_at_commit(owner, repo, hash) {
+  const version_url = `https://github.com/${owner}/${repo}/tree/${hash}/oapispec/version.py`
+
+  try {
+    const { body } = await http_get(version_url)
+    return parse_version(body)
+  } catch(err) {
+    console.log(err)
+    process.exit(1)
+  }
+
 }
 
 run()
