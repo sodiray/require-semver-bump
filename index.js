@@ -1,5 +1,6 @@
 const { Octokit } = require("@octokit/rest")
 const github = require('@actions/github')
+const core = require('@actions/core')
 const request = require('request')
 const semver = require('semver')
 
