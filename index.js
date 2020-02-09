@@ -41,8 +41,8 @@ async function run() {
 
   const base_commit_sha = pull.base.sha
 
-  const head_version = get_version_at_commit(owner, repo, push_commmit_sha)
-  const base_version = get_version_at_commit(owner, repo, base_commit_sha)
+  const head_version = await get_version_at_commit(owner, repo, push_commmit_sha)
+  const base_version = await get_version_at_commit(owner, repo, base_commit_sha)
 
   console.log(`Head Version: ${head_version}`)
   console.log(`Base Version: ${base_version}`)
