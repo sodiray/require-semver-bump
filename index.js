@@ -25,12 +25,7 @@ async function run() {
 
   const octokit = new github.GitHub(token)
 
-  const repo_name = event.repository.full_name
-
-  const { data: pulls } = await octokit.pulls.list({
-    owner: 'rayepps',
-    repo: repo_name
-  })
+  const { data: pulls } = await octokit.pulls.list({ owner: repo_owner, repo: repo_name })
 
   const pull = pulls.find(p => p.head.sha == push_commmit_sha)
 
