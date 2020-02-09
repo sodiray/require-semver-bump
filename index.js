@@ -44,8 +44,19 @@ async function run() {
   const head_version_url = `https://github.com/${owner}/${repo}/tree/${push_commmit_sha}/oapispec/version.py`
   const base_version_url = `https://github.com/${owner}/${repo}/tree/${base_commit_sha}/oapispec/version.py`
 
-  const head_version_file = await http_get(head_version_url)
-  const base_version_file = await http_get(base_version_url)
+  try {
+    const head_version_file = await http_get(head_version_url)
+  } catch(err) {
+    console.log(err)
+    process.exit(1)
+  }
+
+  try {
+    const base_version_file = await http_get(base_version_url)
+  } catch(err) {
+    console.log(err)
+    process.exit(1)
+  }
 
   const head_version = parse_version(head_version_file)
   const base_version = parse_version(base_version_file)
@@ -67,7 +78,7 @@ function http_get(url) {
     request(url, (error, response, body) => {
       if (error) return reject(error)
       if (!response) return reject('No response recieved')
-      if (response.statusCode > 299) return reject(`Bad response. Code ${response.statusCode}`)
+      if (response.statusCode > 299) return reject(`Bad response (${response.statusCode}) from ${url}`)
       resolve({ response, body })
     })
   })
