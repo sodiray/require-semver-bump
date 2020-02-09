@@ -4,11 +4,6 @@ const core = require('@actions/core')
 const request = require('request')
 const semver = require('semver')
 
-if (process.env.GITHUB_TOKEN) {
-  console.error("Missing GITHUB_TOKEN")
-  process.exit(1)
-}
-
 async function run() {
 
   // Type: https://developer.github.com/v3/activity/events/types/#pushevent
@@ -80,7 +75,9 @@ async function get_version_at_commit(owner, repo, hash) {
   const version_url = `https://github.com/${owner}/${repo}/tree/${hash}/oapispec/version.py`
 
   try {
-    const { body } = await http_get(version_url)
+    const { response, body } = await http_get(version_url)
+    console.log(response)
+    console.log(body)
     return parse_version(body)
   } catch(err) {
     console.log(err)
