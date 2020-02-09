@@ -67,7 +67,7 @@ function http_get(url) {
 
 function parse_version(str) {
   const regex = /VERSION\s?\=\s?\'(.+?)\'/
-  const matches = str.regex.match(regex)
+  const matches = str.match(regex)
   return matches.length > 1 ? matches[1] : null
 }
 
