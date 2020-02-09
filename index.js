@@ -1,7 +1,7 @@
 const act = require('@actions/core')
 const { Octokit } = require("@octokit/rest")
 const request = require('request')
-const semvar = require('semvar')
+const semver = require('semver')
 
 if (process.env.GITHUB_TOKEN) {
   console.error("Missing GITHUB_TOKEN")

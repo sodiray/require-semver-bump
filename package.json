@@ -20,6 +20,7 @@
   "dependencies": {
     "@actions/core": "^1.2.2",
     "@octokit/rest": "^16.43.1",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "semver": "^7.1.2"
   }
 }
