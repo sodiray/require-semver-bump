@@ -1,0 +1,12 @@
+name: 'Require Semantic Versioning Bump'
+description: 'Requires that the PR being merged has bumped the version to another valid semvar'
+inputs:
+  github-token:
+    description: 'GitHub Token'
+    required: true
+# outputs:
+#   time: # id of output
+#     description: 'The time we greeted you'
+runs:
+  using: 'node12'
+  main: 'index.js'

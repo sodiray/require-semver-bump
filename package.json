@@ -1,0 +1,25 @@
+{
+  "name": "require-semvar-bump",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rayepps/require-semvar-bump.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rayepps/require-semvar-bump/issues"
+  },
+  "homepage": "https://github.com/rayepps/require-semvar-bump#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.2",
+    "@actions/github": "^2.1.0",
+    "request": "^2.88.0"
+  }
+}
