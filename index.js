@@ -86,3 +86,5 @@ function parse_version(str) {
 }
 
 run()
+
+process.exit(1)
