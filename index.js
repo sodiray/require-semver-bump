@@ -1,5 +1,5 @@
 const act = require('@actions/core')
-const github = require('@actions/github')
+const { Octokit } = require("@octokit/rest")
 const request = require('request')
 const semvar = require('semvar')
 
@@ -23,7 +23,7 @@ async function run() {
   // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
   const token = core.getInput('github-token')
 
-  const octokit = new github.GitHub(token)
+  const octokit = new Octokit()
 
   const { data: pulls } = await octokit.pulls.list({ owner, repo })
 
