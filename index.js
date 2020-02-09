@@ -50,7 +50,7 @@ async function run() {
   }
 
   console.log(`Success, the head version (${head_version}) has been validated to be higher than the base version (${base_version}).`)
-  process.exit(0)
+  process.exit(1)
 
 }
 
@@ -75,10 +75,6 @@ async function get_version_at_commit(owner, repo, hash) {
   const version_url = `https://raw.githubusercontent.com/${owner}/${repo}/${hash}/oapispec/version.py`
   try {
     const { response, body } = await http_get(version_url)
-    console.log('\n\n####\n####  RESPONSE\n####\n####')
-    console.log(response)
-    console.log('\n\n####\n####  BODY\n####\n####')
-    console.log(body)
     return parse_version(body)
   } catch(err) {
     console.log(err)
