@@ -1,4 +1,3 @@
-const act = require('@actions/core')
 const { Octokit } = require("@octokit/rest")
 const request = require('request')
 const semver = require('semver')
