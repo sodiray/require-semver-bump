@@ -9,7 +9,7 @@ const semver = require('semver')
 // myToken: ${{ secrets.GITHUB_TOKEN }}
 // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
 const token = core.getInput('github-token', { required: true })
-const regex = core.getInput('version-regex-pattern') || 'VERSION\\s?\\=\\s?[\\'\\"](.+?)[\\'\\"]'
+const regex = core.getInput('version-regex-pattern') || `VERSION = [\\'\\"](.+?)[\\'\\"]`
 const file_path = core.getInput('version-file-path') || 'version.py'
 
 async function run() {
