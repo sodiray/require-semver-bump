@@ -8,9 +8,9 @@ const semver = require('semver')
 // The YML workflow will need to set myToken with the GitHub Secret Token
 // myToken: ${{ secrets.GITHUB_TOKEN }}
 // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
-const token = core.getInput('github-token')
-const regex = core.getInput('version-regex-pattern')
-const file_path = core.getInput('version-file-path')
+const token = core.getInput('github-token', { required: true })
+const regex = core.getInput('version-regex-pattern') || 'VERSION\\s?\\=\\s?[\\'\\"](.+?)[\\'\\"]'
+const file_path = core.getInput('version-file-path') || 'version.py'
 
 async function run() {
 
@@ -67,8 +67,9 @@ function http_get(url) {
 }
 
 function parse_version(str) {
+  core.debug(`RegExp: ${regex}`)
   const matches = str.match(new RegExp(regex))
-  return matches.length > 1 ? matches[1] : null
+  return matches && matches.length > 1 ? matches[1] : null
 }
 
 async function get_version_at_commit(owner, repo, hash) {
