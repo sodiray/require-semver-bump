@@ -4,6 +4,14 @@ const core = require('@actions/core')
 const request = require('request')
 const semver = require('semver')
 
+// This should be a token with access to your repository scoped in as a secret.
+// The YML workflow will need to set myToken with the GitHub Secret Token
+// myToken: ${{ secrets.GITHUB_TOKEN }}
+// https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
+const token = core.getInput('github-token')
+const regex = core.getInput('version-regex-pattern')
+const file_path = core.getInput('version-file-path')
+
 async function run() {
 
   // Type: https://developer.github.com/v3/activity/events/types/#pushevent
@@ -12,12 +20,6 @@ async function run() {
   const repo = event.repository.name
   const owner = event.repository.owner.login
   const push_commmit_sha = event.after
-
-  // This should be a token with access to your repository scoped in as a secret.
-  // The YML workflow will need to set myToken with the GitHub Secret Token
-  // myToken: ${{ secrets.GITHUB_TOKEN }}
-  // https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret
-  const token = core.getInput('github-token')
 
   const octokit = new Octokit()
 
@@ -65,19 +67,18 @@ function http_get(url) {
 }
 
 function parse_version(str) {
-  const regex = /VERSION\s?\=\s?\'(.+?)\'/
-  const matches = str.match(regex)
+  const matches = str.match(new RegExp(regex))
   return matches.length > 1 ? matches[1] : null
 }
 
 async function get_version_at_commit(owner, repo, hash) {
-  const version_url = `https://raw.githubusercontent.com/${owner}/${repo}/${hash}/oapispec/version.py`
+  const version_url = `https://raw.githubusercontent.com/${owner}/${repo}/${hash}/oapispec/${file_path}`
   try {
     const { response, body } = await http_get(version_url)
     return parse_version(body)
   } catch(err) {
     core.setFailed(err)
-    return 'VERSION_ERROR'
+    throw `Failed to get and parse version from ${version_url}`
   }
 
 }
