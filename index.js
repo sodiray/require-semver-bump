@@ -77,7 +77,8 @@ async function get_version_at_commit(owner, repo, hash) {
     const { response, body } = await http_get(version_url)
     return parse_version(body)
   } catch(err) {
-    core.setFailed(err)
+    core.error(err.toString())
+    core.setFailed(err.toString())
     throw `Failed to get and parse version from ${version_url}`
   }
 
