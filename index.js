@@ -68,6 +68,7 @@ function http_get(url) {
 
 function parse_version(str) {
   core.debug(`RegExp: ${regex}`)
+  core.debug(`Version Input: ${str}`)
   const matches = str.match(new RegExp(regex))
   return matches && matches.length > 1 ? matches[1] : null
 }
