@@ -73,7 +73,7 @@ function parse_version(str) {
 }
 
 async function get_version_at_commit(owner, repo, hash) {
-  const version_url = `https://raw.githubusercontent.com/${owner}/${repo}/${hash}/oapispec/${file_path}`
+  const version_url = `https://raw.githubusercontent.com/${owner}/${repo}/${hash}/${file_path}`
   try {
     const { response, body } = await http_get(version_url)
     return parse_version(body)
