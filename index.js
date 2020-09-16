@@ -86,4 +86,8 @@ async function get_version_at_commit(owner, repo, hash) {
 
 }
 
-run()
+run().catch(err => {
+  console.error(err)
+  console.trace()
+  process.exit(1)
+})
