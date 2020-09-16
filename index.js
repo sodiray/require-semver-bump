@@ -38,8 +38,8 @@ async function run() {
 
   const base_commit_sha = pull.base.sha
 
-  const head_version = await get_version_at_commit(owner, repo, push_commmit_sha)
-  const base_version = await get_version_at_commit(owner, repo, base_commit_sha)
+  const head_version = await get_version_at_commit(owner, repo, push_commmit_sha, token)
+  const base_version = await get_version_at_commit(owner, repo, base_commit_sha, token)
 
   core.debug(`Head Version: ${head_version}`)
   core.debug(`Base Version: ${base_version}`)
@@ -55,9 +55,14 @@ async function run() {
 
 }
 
-function http_get(url) {
+function http_get(url, token) {
   return new Promise((resolve, reject) => {
-    request(url, (error, response, body) => {
+    request({ 
+      url, 
+      headers: {
+        'Authorization': `token ${token}`
+      }
+    }, (error, response, body) => {
       if (error) return reject(error)
       if (!response) return reject('No response recieved')
       if (response.statusCode > 299) return reject(`Bad response (${response.statusCode}) from ${url}`)
@@ -73,11 +78,11 @@ function parse_version(str) {
   return matches && matches.length > 1 ? matches[1] : null
 }
 
-async function get_version_at_commit(owner, repo, hash) {
+async function get_version_at_commit(owner, repo, hash, token) {
   const version_url = `https://raw.githubusercontent.com/${owner}/${repo}/${hash}/${file_path}`
   core.debug(`Pulling version from ${version_url}`)
   try {
-    const { response, body } = await http_get(version_url)
+    const { response, body } = await http_get(version_url, token)
     return parse_version(body)
   } catch(err) {
     core.error(err.toString())
