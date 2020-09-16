@@ -21,7 +21,7 @@ async function run() {
   const owner = event.repository.owner.login
   const push_commmit_sha = event.after
 
-  const octokit = new Octokit()
+  const octokit = new Octokit({ auth: token })
 
   const { data: pulls } = await octokit.pulls.list({ owner, repo })
 
