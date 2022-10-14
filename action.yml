@@ -1,18 +1,16 @@
-name: 'Require Semantic Versioning Bump'
-description: 'Requires that the PR being merged has bumped the version to another valid semver'
+name: "Require Semantic Versioning Bump"
+description: "Requires that the PR being merged has bumped the version to a valid semver"
 inputs:
   github-token:
-    description: 'GitHub Token'
+    description: A GitHub token.
+    required: false
+    default: ${{ github.token }}
+  file:
+    description: "The relative path (from your project root) to the file with your version identifier in it. Do not include the initial backslash."
     required: true
-  version-file-path:
-    description: 'The relative path (from your project root) to the file with your version identifier in it. Do not include the initial backslash.'
-    required: false
-    default: 'version.py'
-  version-regex-pattern:
-    description: 'The regex pattern that should be used to parse the version from your version file. Note: because the string will be converted to a regex the backslashes need to be double escaped.'
-    required: false
-    default: >
-      VERSION = [\\'\\"](.+?)[\\'\\"]
+  pattern:
+    description: "The regex pattern that should be used to parse the version from your version file. Note: because the string will be converted to a regex the backslashes need to be double escaped."
+    required: true
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: "node16"
+  main: "index.js"
